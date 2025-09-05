@@ -22,15 +22,13 @@ export default function MovieCard({ movie }: MoviesCardProps): JSX.Element {
   } = movie;
 
   const renderGenres = useCallback<() => React.ReactNode>(() => {
-    return genres.map((ele) => (
-      <ChipComponent label={ele} key={ele} className="" />
-    ));
+    return genres.map((ele) => <ChipComponent label={ele} key={ele} />);
   }, [genres]);
 
   return (
     <div
       key={id}
-      className=" rounded-md shadow-md overflow-hidden transform transition duration-300 hover:scale-102 cursor-pointer"
+      className="rounded-md shadow-md overflow-hidden transform transition duration-300 hover:scale-102 cursor-pointer"
     >
       <div className="relative w-full aspect-[2/3]">
         <Image
@@ -43,7 +41,7 @@ export default function MovieCard({ movie }: MoviesCardProps): JSX.Element {
       </div>
 
       <div className="p-2 flex flex-col gap-1">
-        <Typography>{title}</Typography>
+        <Typography className="line-clamp-1">{title}</Typography>
         <Typography
           variant={TypographyVariant.Caption}
           className="text-gray-500 line-clamp-2"

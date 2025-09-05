@@ -1,7 +1,10 @@
+"use client";
 import Typography from "@/components/atoms/typography";
-import { JSX } from "react";
+import { JSX, useEffect, useMemo, useState } from "react";
 import { TypographyVariant } from "../../../enums/typography";
 import Movies from "./movies";
+import Filters from "./filters";
+import { Options } from "@/components/molecules/genreFilter";
 
 const { Caption } = TypographyVariant;
 export interface MoviesInterface {
@@ -46,7 +49,7 @@ const movies: Array<MoviesInterface> = [
     numberOfReviews: 540,
     genres: ["Romance", "Drama"],
     poster:
-      "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbdaxApG2uMi8SQFcTUP4TcHP3C1crE5NVbg&s",
+      "https://themarketingbirds.com/wp-content/uploads/2021/04/Creative-Movie-Posters-64-2.jpg",
   },
   {
     id: 4,
@@ -250,15 +253,70 @@ const movies: Array<MoviesInterface> = [
 ];
 
 export default function Home(): JSX.Element {
+  const [search, setSearch] = useState<string>("");
+  const [debouncedSearch, setDebouncedSearch] = useState<string>("");
+  const [selectedGenre, setSelectedGenre] = useState<string | number | null>(
+    null
+  );
+
+  useEffect(() => {
+    const debounce = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+    return () => clearTimeout(debounce);
+  }, [search]);
+
+  const filteredMovies = useMemo<MoviesInterface[]>(() => {
+    console.log(selectedGenre);
+
+    const filtered: MoviesInterface[] = movies.filter((movie) => {
+      const searchFilter = movie.title
+        .toLowerCase()
+        .includes(debouncedSearch.toLowerCase());
+      const matchesGenre =
+        !selectedGenre || movie.genres.includes(String(selectedGenre));
+
+      return searchFilter && matchesGenre;
+    });
+
+    return filtered;
+  }, [debouncedSearch, movies, selectedGenre]);
+
+  const genres: Options[] = useMemo(() => {
+    return filteredMovies.reduce<Options[]>((acc, movie) => {
+      movie.genres.forEach((genre) => {
+        if (!acc.find((g) => g.value === genre)) {
+          acc.push({
+            id: genre,
+            label: genre,
+            value: genre,
+          });
+        }
+      });
+      return acc;
+    }, []);
+  }, [debouncedSearch, filteredMovies]);
+
   return (
-    <div className="">
-      <div className="my-4">
+    <div className="flex flex-col gap-3">
+      <div className="">
         <Typography>In-Flight Entertainment</Typography>
         <Typography variant={Caption} className="text-gray-500">
           Discover our curated collection of movies for your journey
         </Typography>
       </div>
-      <Movies movies={movies} />
+      <Filters
+        onSearch={(value) => {
+          setSearch(value);
+        }}
+        genres={genres}
+        onSelect={(value) => {
+          console.log(value);
+
+          setSelectedGenre(value);
+        }}
+      />
+      <Movies movies={filteredMovies} />
     </div>
   );
 }

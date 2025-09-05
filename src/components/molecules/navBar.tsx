@@ -1,7 +1,6 @@
 import { JSX } from "react";
 import Typography from "../atoms/typography";
 import { TypographyVariant } from "../../../enums/typography";
-import ChipComponent from "./chip";
 import MovieIcon from "@/assets/movie";
 
 const { Body, Caption } = TypographyVariant;
@@ -12,7 +11,6 @@ export default function NavBar(): JSX.Element {
       <div className="flex flex-row gap-2 items-center">
         <MovieIcon className="h-5 w-5" />
         <Typography variant={Body}>SkyLine Cinema</Typography>
-        <ChipComponent label="Movies" />
       </div>
       <div className="flex flex-row gap-2 items-center">
         <Typography variant={Caption}>Welcome, Rakesh Kumar</Typography>
