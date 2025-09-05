@@ -311,8 +311,6 @@ export default function Home(): JSX.Element {
         }}
         genres={genres}
         onSelect={(value) => {
-          console.log(value);
-
           setSelectedGenre(value);
         }}
       />

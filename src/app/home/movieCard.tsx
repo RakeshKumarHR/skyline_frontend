@@ -1,10 +1,11 @@
-import React, { JSX, useCallback } from "react";
+import React, { JSX } from "react";
 import { MoviesInterface } from "./page";
 import Image from "next/image";
 import Typography from "@/components/atoms/typography";
 import { TypographyVariant } from "../../../enums/typography";
-import ChipComponent from "@/components/molecules/chip";
 import StarIcon from "@/assets/star";
+import Genres from "../../components/molecules/genres";
+import RatingAndReviews from "@/components/molecules/ratingAndReviews";
 
 interface MoviesCardProps {
   movie: MoviesInterface;
@@ -20,10 +21,6 @@ export default function MovieCard({ movie }: MoviesCardProps): JSX.Element {
     synopsis,
     title,
   } = movie;
-
-  const renderGenres = useCallback<() => React.ReactNode>(() => {
-    return genres.map((ele) => <ChipComponent label={ele} key={ele} />);
-  }, [genres]);
 
   return (
     <div
@@ -48,15 +45,11 @@ export default function MovieCard({ movie }: MoviesCardProps): JSX.Element {
         >
           {synopsis}
         </Typography>
-        <div className="flex items-center gap-1">
-          <Typography className="flex items-center">
-            <StarIcon className="w-3 h-3 !text-yellow-500" /> {averageRating}
-          </Typography>
-          <Typography className="!text-[8px] text-gray-500">
-            ({numberOfReviews} Reviews)
-          </Typography>
-        </div>
-        <div className="flex flex-wrap gap-1 ">{renderGenres()}</div>
+        <RatingAndReviews
+          averageRating={averageRating}
+          numberOfReviews={numberOfReviews}
+        />
+        <Genres genres={genres} />
       </div>
     </div>
   );
