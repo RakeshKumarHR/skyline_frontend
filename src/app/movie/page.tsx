@@ -35,16 +35,6 @@ export default function Movie(): JSX.Element {
         </div>
         <Typography>{movie.title}</Typography>
         <Genres genres={movie.genres} />
-        <RatingAndReviews
-          averageRating={movie.averageRating}
-          numberOfReviews={movie.numberOfReviews}
-        />
-        <div className="border border-gray-100 p-[8px] rounded-lg flex flex-col gap-2">
-          <Typography variant={TypographyVariant.Caption}>
-            Rate this movie
-          </Typography>
-          <StarRating />
-        </div>
       </div>
       <div className="col-span-7 flex flex-col gap-2">
         <Typography className="font-medium ">Synopsis</Typography>
@@ -54,6 +44,16 @@ export default function Movie(): JSX.Element {
         >
           {movie.synopsis}
         </Typography>
+        <RatingAndReviews
+          averageRating={movie.averageRating}
+          numberOfReviews={movie.numberOfReviews}
+        />
+        <div className="border border-gray-100 p-[8px] rounded-lg flex flex-col gap-2 self-start">
+          <Typography variant={TypographyVariant.Caption}>
+            Rate this movie
+          </Typography>
+          <StarRating />
+        </div>
         <div className="flex gap-2 items-center ">
           <CommentIcon className="h-4 w-4" />
           <Typography
@@ -68,7 +68,7 @@ export default function Movie(): JSX.Element {
             className="bg-[#F3F3F5] rounded-lg px-[12px] py-[8px] w-full text-[10px] h-[60px] resize-none align-top outline-0"
             placeholder="Share your thoughts about this movie..."
           />
-          <div className="bg-[#717182] px-[12] py-[6] self-end flex gap-2 rounded items-center">
+          <div className="bg-[#030213] px-[12] py-[6] self-end flex gap-2 rounded items-center">
             <PostIcon className="h-3 w-3" />
             <Typography
               className="text-white"
