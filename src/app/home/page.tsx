@@ -267,8 +267,6 @@ export default function Home(): JSX.Element {
   }, [search]);
 
   const filteredMovies = useMemo<MoviesInterface[]>(() => {
-    console.log(selectedGenre);
-
     const filtered: MoviesInterface[] = movies.filter((movie) => {
       const searchFilter = movie.title
         .toLowerCase()
