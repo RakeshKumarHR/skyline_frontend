@@ -26,7 +26,10 @@ export interface RatedMovieResponse {
   createdAt: string;
   userRating: number | null;
 }
-
+interface CommentPayload {
+  commentId: string;
+  comment: string;
+}
 const getProfile = async (): Promise<ProfileResponse | null> => {
   try {
     const { data } = await axiosInstance.get("/api/profile");
@@ -37,4 +40,23 @@ const getProfile = async (): Promise<ProfileResponse | null> => {
   }
 };
 
-export { getProfile };
+const updateComment = async (payload: CommentPayload) => {
+  try {
+    const { data } = await axiosInstance.put("/api/comments", payload);
+    return data;
+  } catch (error) {
+    handleAxiosError(error);
+  }
+};
+
+const deleteComment = async (commentId: string) => {
+  try {
+    const { data } = await axiosInstance.delete(`/api/comments/${commentId}`);
+    return data;
+  } catch (error) {
+    console.error("Error deleting comment:", error);
+    throw error;
+  }
+};
+
+export { getProfile, updateComment, deleteComment };

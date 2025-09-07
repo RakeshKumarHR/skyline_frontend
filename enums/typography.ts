@@ -5,3 +5,8 @@ export enum TypographyVariant {
   Body = "body",
   Caption = "caption",
 }
+
+export enum ButtonVariant {
+  filled = "filled",
+  outlined = "outlined",
+}

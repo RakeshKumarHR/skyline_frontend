@@ -16,6 +16,7 @@ import {
 } from "../../../../services/movies";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import TextArea from "@/components/atoms/textArea";
 
 interface MovieProps {
   movie: MovieResponse;
@@ -106,8 +107,7 @@ export default function MovieComponent({ movie }: MovieProps): JSX.Element {
           </Typography>
         </div>
         <div className="border border-gray-100 rounded-lg p-[8px] gap-2 flex flex-col">
-          <textarea
-            className="bg-[#F3F3F5] rounded-lg px-[12px] py-[8px] w-full text-[10px] h-[60px] resize-none align-top outline-0"
+          <TextArea
             placeholder="Share your thoughts about this movie..."
             value={comment}
             onChange={(event) => {
