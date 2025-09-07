@@ -37,8 +37,8 @@ export default function GenreFilter({
       }
       options={genres}
       onSelect={(option) => {
-        onSelect(option.id);
-        setSelected(option.id);
+        onSelect(option.value);
+        setSelected(option.value);
       }}
     />
   );

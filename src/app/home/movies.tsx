@@ -1,14 +1,14 @@
 import React, { JSX, useCallback } from "react";
-import { MoviesInterface } from "./page";
 import MovieCard from "./movieCard";
+import { MovieResponse } from "../../../services/movies";
 interface MoviesProps {
-  movies: Array<MoviesInterface>;
+  movies: Array<MovieResponse>;
 }
 
 export default function Movies({ movies = [] }: MoviesProps): JSX.Element {
   const renderMovies = useCallback<() => React.ReactNode>(() => {
     return movies?.map((movie) => {
-      return <MovieCard movie={movie} key={movie.id} />;
+      return <MovieCard movie={movie} key={movie._id} />;
     });
   }, [movies]);
   return (

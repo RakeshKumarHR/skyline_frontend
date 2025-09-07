@@ -1,32 +1,42 @@
 import Typography from "@/components/atoms/typography";
 import Image from "next/image";
 import { JSX } from "react";
-import { TypographyVariant } from "../../../enums/typography";
+import { TypographyVariant } from "../../../../enums/typography";
 import CommentIcon from "@/assets/comment";
 import PostIcon from "@/assets/post";
-import Comments from "./comments";
-import Genres from "../../components/molecules/genres";
+import Comments from "../comments";
+import Genres from "../../../components/molecules/genres";
 import RatingAndReviews from "@/components/molecules/ratingAndReviews";
 import StarRating from "@/components/molecules/statRating";
-const movie = {
-  id: 1,
-  title: "The Galactic Odyssey",
-  synopsis:
-    "A young astronaut embarks on an interstellar journey to save his home planet from impending doom.",
-  averageRating: 4.7,
-  numberOfReviews: 1285,
-  genres: ["Sci-Fi", "Adventure", "Action"],
-  poster:
-    "https://i0.wp.com/www.shutterstock.com/blog/wp-content/uploads/sites/5/2024/03/Stopmotion-poster.jpg?ssl=1",
-};
+import { getMovieById } from "../../../../services/movies";
+// const movie = {
+//   id: 1,
+//   title: "The Galactic Odyssey",
+//   synopsis:
+//     "A young astronaut embarks on an interstellar journey to save his home planet from impending doom.",
+//   averageRating: 4.7,
+//   numberOfReviews: 1285,
+//   genres: ["Sci-Fi", "Adventure", "Action"],
+//   poster:
+//     "https://i0.wp.com/www.shutterstock.com/blog/wp-content/uploads/sites/5/2024/03/Stopmotion-poster.jpg?ssl=1",
+// };
+interface MoviePageProps {
+  params: Promise<{ id: string }>;
+}
 
-export default function Movie(): JSX.Element {
+export default async function Movie({
+  params,
+}: MoviePageProps): Promise<JSX.Element> {
+  const { id } = await params;
+  const movie = await getMovieById(id);
+  console.log(movie, "asd");
+
   return (
     <div className="grid grid-cols-10 gap-4">
       <div className="col-span-3 flex flex-col gap-2">
         <div className="relative w-full aspect-[2/3] ">
           <Image
-            src={movie.poster}
+            src={movie.cover}
             alt={movie.title}
             fill
             className="object-cover rounded"
@@ -34,7 +44,7 @@ export default function Movie(): JSX.Element {
           />
         </div>
         <Typography>{movie.title}</Typography>
-        <Genres genres={movie.genres} />
+        {/* <Genres genres={movie.genres?.map((ele) => ele.title)} /> */}
       </div>
       <div className="col-span-7 flex flex-col gap-2">
         <Typography className="font-medium ">Synopsis</Typography>
@@ -46,7 +56,7 @@ export default function Movie(): JSX.Element {
         </Typography>
         <RatingAndReviews
           averageRating={movie.averageRating}
-          numberOfReviews={movie.numberOfReviews}
+          numberOfReviews={movie.reviewsCount}
         />
         <div className="border border-gray-100 p-[8px] rounded-lg flex flex-col gap-2 self-start">
           <Typography variant={TypographyVariant.Caption}>
