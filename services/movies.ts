@@ -1,3 +1,4 @@
+import { handleAxiosError } from "@/utils";
 import { axiosInstance } from "./axiosInstance";
 
 export interface MovieResponse {
@@ -6,7 +7,7 @@ export interface MovieResponse {
   synopsis: string;
   cover: string;
   genres: { _id: string; title: string }[];
-  ratings: number[];
+  ratings: { user: string; value: number }[];
   averageRating: number;
   reviewsCount: number;
   comments?: [];
@@ -28,10 +29,15 @@ interface CommentResponse {
   data: {};
 }
 
-const handleAxiosError = <T = null>(error: any): T => {
-  console.error("API Error:", error);
-  return null as T;
-};
+interface RatingPayload {
+  movieId: string;
+  rating: number;
+  userId: string;
+}
+interface RatingResponse {
+  message: string;
+  movie: {};
+}
 
 const getMovies = async (): Promise<MovieResponse[]> => {
   try {
@@ -71,4 +77,15 @@ const addComment = async (
   }
 };
 
-export { getMovies, getGenres, getMovieById, addComment };
+const addRating = async (
+  payload: RatingPayload
+): Promise<RatingResponse | null> => {
+  try {
+    const { data } = await axiosInstance.post("/api/movies/rate", payload);
+    return data;
+  } catch (error) {
+    return handleAxiosError<RatingResponse>(error);
+  }
+};
+
+export { getMovies, getGenres, getMovieById, addComment, addRating };

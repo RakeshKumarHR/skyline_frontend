@@ -1,9 +1,22 @@
 "use client";
 import StarIcon from "@/assets/star";
-import React, { JSX, useState } from "react";
-
-export default function StarRating(): JSX.Element {
+import React, { JSX, useEffect, useState } from "react";
+interface StarRatingProps {
+  onChange?: (value: number) => void;
+  value?: number;
+  readOnly?: boolean;
+}
+export default function StarRating({
+  onChange = () => {},
+  value,
+  readOnly = false,
+}: StarRatingProps): JSX.Element {
   const [rating, setRating] = useState<number>(0);
+  useEffect(() => {
+    if (value) {
+      setRating(value);
+    }
+  }, [value]);
 
   return (
     <div className="flex gap-1">
@@ -12,8 +25,13 @@ export default function StarRating(): JSX.Element {
         return (
           <StarIcon
             key={ind}
-            onClick={() => setRating(starValue)}
-            className={`cursor-pointer hover:scale-115 ${
+            onClick={() => {
+              onChange(starValue);
+              if (!readOnly) {
+                setRating(starValue);
+              }
+            }}
+            className={` ${!readOnly && "hover:scale-115 cursor-pointer"} ${
               starValue <= rating ? "text-yellow-500" : "text-gray-300"
             }`}
           />

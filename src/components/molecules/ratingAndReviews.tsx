@@ -14,7 +14,8 @@ export default function RatingAndReviews({
   return (
     <div className="flex items-center gap-1">
       <Typography className="flex items-center">
-        <StarIcon className="w-3 h-3 !text-yellow-500" /> {averageRating}
+        <StarIcon className="w-3 h-3 !text-yellow-500" />{" "}
+        {averageRating?.toFixed(2)}
       </Typography>
       <Typography className="!text-[8px] text-gray-500">
         ({numberOfReviews} Reviews)

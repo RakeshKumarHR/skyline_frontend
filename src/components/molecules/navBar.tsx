@@ -24,6 +24,9 @@ export default function NavBar(): JSX.Element {
     setMenuOpen(false);
     router.push("/profile");
   };
+  const goToHome = () => {
+    router.push("/home");
+  };
 
   const logout = () => {
     setMenuOpen(false);
@@ -32,7 +35,10 @@ export default function NavBar(): JSX.Element {
 
   return (
     <div className="flex flex-row px-8 md:px-24 py-2 bg-white shadow-md items-center justify-between fixed top-0 left-0 right-0 z-10">
-      <div className="flex flex-row gap-2 items-center">
+      <div
+        className="flex flex-row gap-2 items-center cursor-pointer"
+        onClick={goToHome}
+      >
         <MovieIcon className="h-5 w-5" />
         <Typography variant={Body}>SkyLine Cinema</Typography>
       </div>

@@ -9,8 +9,13 @@ import Comments from "../comments";
 import Genres from "../../../components/molecules/genres";
 import RatingAndReviews from "@/components/molecules/ratingAndReviews";
 import StarRating from "@/components/molecules/statRating";
-import { addComment, MovieResponse } from "../../../../services/movies";
+import {
+  addComment,
+  addRating,
+  MovieResponse,
+} from "../../../../services/movies";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface MovieProps {
   movie: MovieResponse;
@@ -20,6 +25,7 @@ export default function MovieComponent({ movie }: MovieProps): JSX.Element {
   const [comment, setComment] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const { data: session } = useSession();
+  const router = useRouter();
 
   const userId = session?.user?.id;
 
@@ -42,6 +48,17 @@ export default function MovieComponent({ movie }: MovieProps): JSX.Element {
       setLoading(false);
     }
   }, [comment, movie, userId]);
+
+  const updateRating = async (rating: number): Promise<void> => {
+    const data = await addRating({
+      movieId: movie._id,
+      rating,
+      userId: String(userId),
+    });
+    if (data) {
+      router.refresh();
+    }
+  };
   return (
     <div className="grid grid-cols-10 gap-4">
       <div className="col-span-3 flex flex-col gap-2">
@@ -73,7 +90,11 @@ export default function MovieComponent({ movie }: MovieProps): JSX.Element {
           <Typography variant={TypographyVariant.Caption}>
             Rate this movie
           </Typography>
-          <StarRating />
+          <StarRating
+            onChange={(rating) => {
+              updateRating(rating);
+            }}
+          />
         </div>
         <div className="flex gap-2 items-center ">
           <CommentIcon className="h-4 w-4" />

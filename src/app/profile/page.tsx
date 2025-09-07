@@ -1,44 +1,12 @@
-"use client";
-import Typography from "@/components/atoms/typography";
-import Tabs, { TabOption, TabsProps } from "@/components/molecules/tabs";
-import { JSX, useState } from "react";
+import { JSX } from "react";
+import { getProfile } from "../../../services/profile";
+import ProfilePage from ".";
 
-const user = {
-  firstName: "John",
-  lastName: "Traveler",
-  email: "rakesh@gmail.com",
-};
+export default async function Profile(): Promise<JSX.Element | null> {
+  const data = await getProfile();
+  if (!data) {
+    return null;
+  }
 
-const tabList: TabOption[] = [
-  {
-    id: 2,
-    label: "Comments",
-    count: 2,
-  },
-  {
-    id: 3,
-    label: "Ratings",
-    count: 2,
-  },
-];
-export default function Profile(): JSX.Element {
-  const [selectedTab, setSelectedTab] = useState(tabList[0].id);
-  return (
-    <div className="flex flex-col gap-2">
-      <div>
-        <Typography className="text-[12px]">
-          {user.firstName} {user.lastName}
-        </Typography>
-        <Typography className="text-[10px] text-gray-500">
-          {user.email}
-        </Typography>
-      </div>
-      <Tabs
-        list={tabList}
-        onSelect={(id) => {
-          setSelectedTab(id);
-        }}
-      />
-    </div>
-  );
+  return <ProfilePage profileDetails={data} />;
 }
