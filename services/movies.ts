@@ -33,7 +33,7 @@ const handleAxiosError = <T = null>(error: any): T => {
   return null as T;
 };
 
-const getMovies = async (): Promise<MovieResponse[] | null> => {
+const getMovies = async (): Promise<MovieResponse[]> => {
   try {
     const { data } = await axiosInstance.get("/api/movies");
     return data;
@@ -42,7 +42,7 @@ const getMovies = async (): Promise<MovieResponse[] | null> => {
   }
 };
 
-const getGenres = async (): Promise<GenresResponse[] | null> => {
+const getGenres = async (): Promise<GenresResponse[]> => {
   try {
     const { data } = await axiosInstance.get("/api/movies/genres");
     return data;

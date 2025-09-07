@@ -14,12 +14,11 @@ export default function NavBar(): JSX.Element {
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
 
-  const userName = session?.user?.name || "Guest";
-  const userInitials =
-    session?.user?.name
-      ?.split(" ")
-      .map((n) => n[0])
-      .join("") || "G";
+  const userName = session?.user?.name;
+  const userInitials = session?.user?.name
+    ?.split(" ")
+    .map((n) => n[0])
+    .join("");
 
   const goToProfile = () => {
     setMenuOpen(false);
@@ -33,13 +32,11 @@ export default function NavBar(): JSX.Element {
 
   return (
     <div className="flex flex-row px-8 md:px-24 py-2 bg-white shadow-md items-center justify-between fixed top-0 left-0 right-0 z-10">
-      {/* Logo */}
       <div className="flex flex-row gap-2 items-center">
         <MovieIcon className="h-5 w-5" />
         <Typography variant={Body}>SkyLine Cinema</Typography>
       </div>
 
-      {/* User menu */}
       <div className="relative">
         <div
           className="flex flex-row gap-2 items-center cursor-pointer"
@@ -56,13 +53,13 @@ export default function NavBar(): JSX.Element {
         {menuOpen && (
           <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-200 shadow-md rounded-md overflow-hidden">
             <button
-              className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              className="w-full text-left p-2 text-[10px] hover:bg-gray-100"
               onClick={goToProfile}
             >
               Profile
             </button>
             <button
-              className="w-full text-left px-4 py-2 hover:bg-gray-100"
+              className="w-full text-left p-2 text-[10px] hover:bg-gray-100"
               onClick={logout}
             >
               Logout

@@ -6,6 +6,7 @@ import Movies from "./movies";
 import Filters from "./filters";
 import { Options } from "@/components/molecules/genreFilter";
 import { GenresResponse, MovieResponse } from "../../../services/movies";
+import { useRouter } from "next/router";
 
 const { Caption } = TypographyVariant;
 interface HomeInterface {
