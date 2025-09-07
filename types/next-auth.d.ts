@@ -8,6 +8,7 @@ declare module "next-auth" {
       id: string;
       name: string;
       email: string;
+      isAdmin: boolean;
     } & DefaultSession["user"];
   }
 
@@ -16,6 +17,7 @@ declare module "next-auth" {
     name: string;
     email: string;
     token?: string;
+    isAdmin: boolean;
   }
 }
 
@@ -26,6 +28,7 @@ declare module "next-auth/jwt" {
       id: string;
       name: string;
       email: string;
+      isAdmin: boolean;
     };
   }
 }

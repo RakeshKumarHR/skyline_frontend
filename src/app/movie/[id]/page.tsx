@@ -1,5 +1,5 @@
 import { JSX } from "react";
-import { getMovieById } from "../../../../services/movies";
+import { getCommentsByMovie, getMovieById } from "../../../../services/movies";
 import MovieComponent from ".";
 
 interface MoviePageProps {
@@ -12,12 +12,13 @@ export default async function Movie({
   try {
     const { id } = await params;
     const movie = await getMovieById(id);
+    const comments = await getCommentsByMovie(id);
 
     if (!movie) {
       return <p>Movie not found.</p>;
     }
 
-    return <MovieComponent movie={movie} />;
+    return <MovieComponent movie={movie} comments={comments} />;
   } catch (error: any) {
     return <p>Failed to load movie. Please try again later.</p>;
   }

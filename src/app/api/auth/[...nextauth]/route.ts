@@ -15,6 +15,7 @@ interface AuthUser {
   email: string;
   name: string;
   token: string;
+  isAdmin: boolean;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -55,6 +56,7 @@ export const authOptions: NextAuthOptions = {
               email: user.email,
               name: user.name || user.email,
               token: user.token,
+              isAdmin: user.isAdmin,
             };
 
             return authUser;
@@ -80,6 +82,7 @@ export const authOptions: NextAuthOptions = {
           id: user.id,
           name: user.name,
           email: user.email,
+          isAdmin: (user as any).isAdmin || false,
         };
 
         token.accessToken = user.token;

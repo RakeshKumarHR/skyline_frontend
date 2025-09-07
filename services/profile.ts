@@ -18,6 +18,10 @@ export interface CommentResponse {
   text: string;
   movie: string;
   createdAt: string;
+  user?: {
+    _id: string;
+    name: string;
+  };
 }
 
 export interface RatedMovieResponse {

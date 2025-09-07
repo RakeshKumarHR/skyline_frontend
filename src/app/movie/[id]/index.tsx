@@ -17,12 +17,17 @@ import {
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import TextArea from "@/components/atoms/textArea";
+import { CommentResponse } from "../../../../services/profile";
 
 interface MovieProps {
   movie: MovieResponse;
+  comments: CommentResponse[];
 }
 
-export default function MovieComponent({ movie }: MovieProps): JSX.Element {
+export default function MovieComponent({
+  movie,
+  comments,
+}: MovieProps): JSX.Element {
   const [comment, setComment] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const { data: session } = useSession();
@@ -42,6 +47,7 @@ export default function MovieComponent({ movie }: MovieProps): JSX.Element {
       if (data?.data && data?.message) {
         alert(data?.message);
         setComment("");
+        router.refresh();
       }
     } catch (error) {
       console.error(error);
@@ -127,7 +133,7 @@ export default function MovieComponent({ movie }: MovieProps): JSX.Element {
             </Typography>
           </div>
         </div>
-        <Comments />
+        <Comments comments={comments} />
       </div>
     </div>
   );

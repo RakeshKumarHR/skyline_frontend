@@ -14,8 +14,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/home", request.url));
   }
 
-  const protectedRoutes = ["/", "/home", "/profile", "/movies"];
-
+  const protectedRoutes = ["/", "/home", "/profile", "/dashboard"];
   const isProtected = protectedRoutes.some(
     (route) => pathname === route || pathname.startsWith(`${route}/`)
   );
@@ -24,6 +23,9 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL("/auth/signin", request.url));
   }
 
+  if (pathname.startsWith("/dashboard") && token?.user?.isAdmin !== true) {
+    return NextResponse.redirect(new URL("/home", request.url));
+  }
   return NextResponse.next();
 }
 

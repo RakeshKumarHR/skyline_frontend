@@ -1,5 +1,6 @@
 import { handleAxiosError } from "@/utils";
 import { axiosInstance } from "./axiosInstance";
+import { CommentResponse as CommentResponses } from "./profile";
 
 export interface MovieResponse {
   readonly _id: string;
@@ -88,4 +89,22 @@ const addRating = async (
   }
 };
 
-export { getMovies, getGenres, getMovieById, addComment, addRating };
+const getCommentsByMovie = async (
+  movieId: string
+): Promise<CommentResponses[]> => {
+  try {
+    const { data } = await axiosInstance.get(`/api/comments/movie/${movieId}`);
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
+};
+
+export {
+  getMovies,
+  getGenres,
+  getMovieById,
+  addComment,
+  addRating,
+  getCommentsByMovie,
+};
