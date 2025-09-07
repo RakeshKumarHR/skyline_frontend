@@ -32,7 +32,6 @@ export default function Login() {
       });
 
       if (res?.error) {
-        // Check if the error indicates user not found (404-like scenario)
         if (
           res.error.includes("Invalid credentials") ||
           res.error.includes("User not found")
@@ -42,7 +41,7 @@ export default function Login() {
           setError("Invalid email or password. Please try again.");
         }
       } else {
-        router.push("/movies");
+        router.push("/home");
       }
     } catch (err: any) {
       if (err.response?.status === 404) {
@@ -65,17 +64,14 @@ export default function Login() {
     setError("");
 
     try {
-      // Register the user
       await axios.post("http://localhost:8000/api/auth/register", {
         name: name.trim(),
         email,
         password,
       });
 
-      // Close the modal
       setShowRegisterModal(false);
 
-      // Automatically sign in the user after registration
       const res = await signIn("credentials", {
         redirect: false,
         email,

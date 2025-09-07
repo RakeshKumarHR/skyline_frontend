@@ -2,10 +2,19 @@ import NextAuth, { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
 
-interface User {
+interface BackendUser {
+  _id: string;
+  email: string;
+  name: string;
+  isAdmin: boolean;
+  token: string;
+}
+
+interface AuthUser {
   id: string;
   email: string;
   name: string;
+  token: string;
 }
 
 export const authOptions: NextAuthOptions = {
@@ -24,30 +33,39 @@ export const authOptions: NextAuthOptions = {
         },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials): Promise<User | null> {
+      async authorize(credentials): Promise<AuthUser | null> {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Email and password are required");
         }
 
         try {
-          const res = await axios.post("http://localhost:8000/api/auth/login", {
-            email: credentials.email,
-            password: credentials.password,
-          });
+          const res = await axios.post<BackendUser>(
+            "http://localhost:8000/api/auth/login",
+            {
+              email: credentials.email,
+              password: credentials.password,
+            }
+          );
 
           const user = res.data;
 
-          if (user && user._id && user.email) {
-            return {
+          if (user && user._id && user.email && user.token) {
+            const authUser: AuthUser = {
               id: user._id.toString(),
               email: user.email,
               name: user.name || user.email,
-            } as User;
+              token: user.token,
+            };
+
+            return authUser;
           }
 
           return null;
         } catch (error: any) {
-          console.error("Authentication error:", error);
+          console.error(
+            "Authentication error:",
+            error.response?.data || error.message
+          );
           throw new Error(
             error.response?.data?.message || "Invalid credentials"
           );
@@ -58,17 +76,26 @@ export const authOptions: NextAuthOptions = {
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        token.user = user;
-        // attach backend JWT if available
-        token.accessToken = (user as any).token;
+        token.user = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        };
+
+        token.accessToken = user.token;
       }
+
       return token;
     },
     async session({ session, token }) {
       if (token.user) {
-        session.user = token.user as User;
-        (session as any).accessToken = token.accessToken;
+        session.user = token.user;
       }
+
+      if (token.accessToken) {
+        session.accessToken = token.accessToken;
+      }
+
       return session;
     },
   },

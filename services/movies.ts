@@ -1,11 +1,12 @@
 import { axiosInstance } from "./axiosInstance";
+
 export interface MovieResponse {
   readonly _id: string;
   title: string;
   synopsis: string;
   cover: string;
   genres: { _id: string; title: string }[];
-  ratings: number;
+  ratings: number[];
   averageRating: number;
   reviewsCount: number;
   comments?: [];
@@ -15,33 +16,59 @@ export interface GenresResponse {
   readonly _id: string;
   title: string;
 }
-const getMovies = (): Promise<MovieResponse[]> => {
-  return axiosInstance
-    .get("/api/movies")
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((err) => ({ err }));
+
+interface CommentPayload {
+  user: string;
+  movie: string;
+  text: string;
+}
+
+interface CommentResponse {
+  message: string;
+  data: {};
+}
+
+const handleAxiosError = <T = null>(error: any): T => {
+  console.error("API Error:", error);
+  return null as T;
 };
 
-const getGenres = (): Promise<GenresResponse[]> => {
-  return axiosInstance
-    .get("/api/movies/genres")
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((err) => ({ err }));
+const getMovies = async (): Promise<MovieResponse[] | null> => {
+  try {
+    const { data } = await axiosInstance.get("/api/movies");
+    return data;
+  } catch (error) {
+    return handleAxiosError<MovieResponse[]>(error);
+  }
 };
 
-const getMovieById = (movieId: string): Promise<MovieResponse> => {
-  return axiosInstance
-    .get(`/api/movies/${movieId}`)
-    .then((res) => {
-      const { data } = res;
-      return data;
-    })
-    .catch((err) => ({ err }));
+const getGenres = async (): Promise<GenresResponse[] | null> => {
+  try {
+    const { data } = await axiosInstance.get("/api/movies/genres");
+    return data;
+  } catch (error) {
+    return handleAxiosError<GenresResponse[]>(error);
+  }
 };
-export { getMovies, getGenres, getMovieById };
+
+const getMovieById = async (movieId: string): Promise<MovieResponse | null> => {
+  try {
+    const { data } = await axiosInstance.get(`/api/movies/${movieId}`);
+    return data;
+  } catch (error) {
+    return handleAxiosError<MovieResponse>(error);
+  }
+};
+
+const addComment = async (
+  payload: CommentPayload
+): Promise<CommentResponse | null> => {
+  try {
+    const { data } = await axiosInstance.post("/api/comments", payload);
+    return data;
+  } catch (error) {
+    return handleAxiosError<CommentResponse>(error);
+  }
+};
+
+export { getMovies, getGenres, getMovieById, addComment };
