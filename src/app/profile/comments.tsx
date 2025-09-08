@@ -41,8 +41,7 @@ export default function Comments({ comments }: CommentsInterface): JSX.Element {
   }, []);
 
   const deleteComments = useCallback(async (id: string): Promise<void> => {
-    const { data } = await deleteComment(id);
-    console.log(data);
+    await deleteComment(id);
     router.refresh();
   }, []);
 

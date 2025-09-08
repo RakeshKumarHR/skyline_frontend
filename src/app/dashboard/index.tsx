@@ -1,16 +1,32 @@
 "use client";
 import { JSX, useMemo, useState } from "react";
-import { GenresResponse, MovieResponse } from "../../../services/movies";
+import {
+  CommentsResponse,
+  GenresResponse,
+  MovieResponse,
+} from "../../../services/movies";
 import Typography from "@/components/atoms/typography";
 import { TypographyVariant } from "../../../enums/typography";
 import Tabs, { TabOption } from "@/components/molecules/tabs";
 import Movies from "./movies";
+import Reviews from "./reviews";
 
 export interface MovieProps {
   movies: MovieResponse[];
   genres: GenresResponse[];
 }
-export default function Dashboard({ movies, genres }: MovieProps): JSX.Element {
+
+export interface DashboardProps {
+  movies: MovieResponse[];
+  genres: GenresResponse[];
+  comments: CommentsResponse[];
+}
+
+export default function Dashboard({
+  movies,
+  genres,
+  comments,
+}: DashboardProps): JSX.Element {
   const tabList = useMemo((): TabOption[] => {
     return [
       {
@@ -21,10 +37,10 @@ export default function Dashboard({ movies, genres }: MovieProps): JSX.Element {
       {
         id: 2,
         label: "Reviews",
-        count: movies.length,
+        count: comments.length,
       },
     ];
-  }, []);
+  }, [movies, comments]);
   const [selectedTab, setSelectedTab] = useState(tabList[0].id);
 
   return (
@@ -44,7 +60,11 @@ export default function Dashboard({ movies, genres }: MovieProps): JSX.Element {
           setSelectedTab(id);
         }}
       />
-      {selectedTab === 1 ? <Movies movies={movies} genres={genres} /> : null}
+      {selectedTab === 1 ? (
+        <Movies movies={movies} genres={genres} />
+      ) : (
+        <Reviews reviews={comments} />
+      )}
     </div>
   );
 }

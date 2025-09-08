@@ -45,6 +45,14 @@ interface RatingResponse {
   message: string;
   movie: {};
 }
+export interface CommentsResponse {
+  _id: string;
+  user: { _id: string; name: string };
+  movie: { _id: string; title: string };
+  text: string;
+  status: "visible" | "hidden";
+  createdAt: string;
+}
 
 const getMovies = async (): Promise<MovieResponse[]> => {
   try {
@@ -132,6 +140,15 @@ const deleteMovie = async (id: string) => {
   }
 };
 
+const getAllComments = async (): Promise<CommentsResponse[]> => {
+  try {
+    const { data } = await axiosInstance.get("/api/comments/all");
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
+};
+
 export {
   getMovies,
   getGenres,
@@ -142,4 +159,5 @@ export {
   addMovie,
   deleteMovie,
   editMovie,
+  getAllComments,
 };

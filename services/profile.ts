@@ -63,4 +63,18 @@ const deleteComment = async (commentId: string) => {
   }
 };
 
-export { getProfile, updateComment, deleteComment };
+const updateCommentStatus = async (commentId: string, flag: boolean) => {
+  try {
+    const { data } = await axiosInstance.put(
+      `/api/comments/status/${commentId}`,
+      {
+        flag,
+      }
+    );
+    return data;
+  } catch (error) {
+    console.error("Error Updating comment:", error);
+    throw error;
+  }
+};
+export { getProfile, updateComment, deleteComment, updateCommentStatus };

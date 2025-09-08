@@ -11,6 +11,7 @@ export default function Button({
   label,
   onClick,
   variant = ButtonVariant.filled,
+  className,
 }: ButtonProps): JSX.Element {
   const baseClasses =
     "text-[10px] h-[24px] rounded px-3 py-1 transition-colors";
@@ -20,7 +21,10 @@ export default function Button({
       ? "bg-[#030213] text-white hover:bg-[#1a1a2e]"
       : "border border-[#030213] text-[#030213] hover:bg-[#f3f3f5]";
   return (
-    <button onClick={onClick} className={`${baseClasses} ${variantClasses}`}>
+    <button
+      onClick={onClick}
+      className={`${baseClasses} ${variantClasses} ${className}`}
+    >
       {label}
     </button>
   );
