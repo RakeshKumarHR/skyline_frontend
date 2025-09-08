@@ -24,7 +24,7 @@ export default function Movies({ movies, genres }: MovieProps): JSX.Element {
     );
     if (!confirmDelete) return;
     try {
-      const { data } = await deleteMovie(id);
+      await deleteMovie(id);
       router.refresh();
     } catch (error) {
       console.error(error);
@@ -97,6 +97,7 @@ export default function Movies({ movies, genres }: MovieProps): JSX.Element {
           movieDetails={movieDetails}
           onClose={() => {
             setMode(null);
+            setMovieDetails(null);
             router.refresh();
           }}
           genres={genres}

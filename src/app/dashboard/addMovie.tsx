@@ -31,22 +31,25 @@ export default function AddMovie({
     coverImage: movieDetails?.cover || "",
   });
 
+  const [loading, setLoading] = useState(false);
+
   const handleChange = (field: keyof typeof formValues, value: string) => {
     setFormValues((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setLoading(true);
 
     try {
-      const url = new URL(formValues.coverImage);
-      if (!url.pathname.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
-        alert("Please enter a valid image URL (jpg, png, gif, webp, svg)");
-        return;
-      }
+      new URL(formValues.coverImage);
     } catch (err) {
       alert("Please enter a valid URL for the cover image");
+      setLoading(false);
+
       return;
+    } finally {
+      setLoading(false);
     }
 
     const payload = {
@@ -58,13 +61,21 @@ export default function AddMovie({
 
     try {
       if (type === "Edit" && movieDetails?._id) {
-        await editMovie(movieDetails._id, payload);
+        const data = await editMovie(movieDetails._id, payload);
+        if (data) {
+          alert("Movie updated successfully");
+        }
       } else {
-        await addMovie(payload);
+        const data = await addMovie(payload);
+        if (data) {
+          alert("Movie added successfully");
+        }
       }
-      onClose();
+      handleClose();
     } catch (error) {
       console.error(error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -107,6 +118,16 @@ export default function AddMovie({
     });
   };
 
+  const handleClose = () => {
+    setFormValues({
+      title: "",
+      synopsis: "",
+      genres: [],
+      coverImage: "",
+    });
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black/50 z-50">
       <div className="bg-white rounded-2xl shadow-lg w-full max-w-lg p-4">
@@ -116,7 +137,7 @@ export default function AddMovie({
           </Typography>
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             className="text-gray-500 hover:text-gray-700 text-xl"
           >
             ×
@@ -159,9 +180,14 @@ export default function AddMovie({
             <Button
               label="Cancel"
               variant={ButtonVariant.outlined}
-              onClick={onClose}
+              onClick={handleClose}
             />
-            <Button label={type} type="submit" />
+            <Button
+              label={
+                loading ? (type === "Add" ? "Adding..." : "Editing...") : type
+              }
+              type="submit"
+            />
           </div>
         </form>
       </div>
