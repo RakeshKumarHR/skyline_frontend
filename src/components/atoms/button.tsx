@@ -3,7 +3,7 @@ import { ButtonVariant } from "../../../enums/typography";
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   label: string;
-  onClick: MouseEventHandler<HTMLButtonElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   variant?: ButtonVariant;
 }
 

@@ -35,6 +35,12 @@ interface RatingPayload {
   rating: number;
   userId: string;
 }
+interface MoviePayload {
+  title: string;
+  synopsis: string;
+  genres: string[];
+  cover: string;
+}
 interface RatingResponse {
   message: string;
   movie: {};
@@ -100,6 +106,32 @@ const getCommentsByMovie = async (
   }
 };
 
+const addMovie = async (payload: MoviePayload) => {
+  try {
+    const { data } = await axiosInstance.post("/api/movies", payload);
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
+};
+const editMovie = async (id: string, payload: MoviePayload) => {
+  try {
+    const { data } = await axiosInstance.put(`/api/movies/${id}`, payload);
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
+};
+
+const deleteMovie = async (id: string) => {
+  try {
+    const { data } = await axiosInstance.delete(`/api/movies/${id}`);
+    return data;
+  } catch (error) {
+    return handleAxiosError(error);
+  }
+};
+
 export {
   getMovies,
   getGenres,
@@ -107,4 +139,7 @@ export {
   addComment,
   addRating,
   getCommentsByMovie,
+  addMovie,
+  deleteMovie,
+  editMovie,
 };
